@@ -1,7 +1,7 @@
 type Props = {
   onChange: (term: string) => void;
 };
-export default function ClientSideSearch({ onChange }: Props) {
+export default function Search({ onChange }: Props) {
   return (
     <input
       type="search"
