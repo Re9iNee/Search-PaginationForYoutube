@@ -1,5 +1,5 @@
+import { Aviation } from "@/app/types/aviation.type";
 import AviationList from "../../components/AviationList";
-import useGetAirplanes from "../../hooks/useGetAirplanes";
 import { filterByName } from "../../utils/appUtil";
 import SearchWrapper from "./search-wrapper";
 
@@ -8,9 +8,9 @@ type Props = {
     term?: string;
   };
 };
-export default function ServerSide({ searchParams }: Props) {
+export default async function ServerSideListPage({ searchParams }: Props) {
+  const aviationList = await getAviationList();
   const searchTerm = searchParams.term ?? "";
-  const { aviationList } = useGetAirplanes();
 
   return (
     <>
@@ -19,4 +19,12 @@ export default function ServerSide({ searchParams }: Props) {
       <AviationList list={filterByName(aviationList, searchTerm)} />
     </>
   );
+}
+
+async function getAviationList(): Promise<Aviation[]> {
+  const resp = await fetch("http://localhost:3000/api/aviation", {
+    cache: "no-store",
+  });
+  const list = await resp.json();
+  return list;
 }
